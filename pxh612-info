@@ -1,0 +1,71 @@
+#!/bin/bash
+set -e
+path=$HOME/.BIN-DATA/pxh612-info
+
+echoline(){
+    echo
+    echo "==================     "
+    echo
+} 
+displayAllInformation(){
+    pxh612-date 
+    echoline
+    pxh612-INFO-volume
+    echoline
+    pxh612-internet
+    echo
+    echoline
+    pxh612-INFO-memory
+    echo
+    echo //TODO: top 3 most resourceful task
+    echoline
+    pxh612-INFO-storage
+    echo
+    echoline
+    pxh612-battery
+    echo
+}
+
+convertImage(){
+    pango-view \
+        --font="Roboto 10" \
+        --background=black \
+        --foreground=white \
+        -q \
+        "$path-output" \
+        -o $path-output.png
+}
+
+setWallpaper(){
+    feh --bg-center "$path-output.png" --geometry 0x0
+}
+
+displayInfo=true
+setWallpaper=false
+while getopts 'is' FLAG; do
+  case "$FLAG" in
+	i) 
+		info=true ;;
+    s) 
+        displayInfo=false 
+        setWallpaper=true ;;
+  esac
+done
+shift "$(($OPTIND -1))"
+echo -e "   displayInfo = $displayInfo \n   setWallpaper = $setWallpaper\n" >&2
+
+
+
+
+if [ $displayInfo = true ] 
+then 
+    displayAllInformation 
+fi
+
+if [ $setWallpaper = true ]
+then 
+    echo -e "   displayInfo = $displayInfo \n   setWallpaper = $setWallpaper\n" >&2
+    displayAllInformation > "$path-output"
+    convertImage
+    setWallpaper
+fi

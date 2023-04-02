@@ -1,0 +1,24 @@
+#!/bin/sh
+
+displayName(){
+    NAME=$(iwgetid -r)
+    #IP=$(curl ifconfig.me)
+    echo Wifi: $NAME
+}
+
+displaySpeed(){
+    path=$HOME/.BIN-DATA/pxh612-INFO-internetSpeed-getSpeed
+
+    speed=$(cat $path-speed)
+    speedMB=$(cat $path-speedMB)
+
+    if  [ -z "$speed" ]
+    then 
+        printf "...no connection..."
+    else 
+        printf "Speed: $speed Mbit/s = $speedMB MB/s"
+    fi
+    echo
+}
+displayName
+displaySpeed

@@ -1,0 +1,8 @@
+#!/bin/sh
+
+str=$(realpath "$@")
+if [ -n "$str" ]
+then
+		echo "$str" | xclip -selection clipboard -r
+		echo Copied \"$str\" to clipboard
+fi

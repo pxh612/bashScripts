@@ -1,0 +1,34 @@
+#!/bin/bash
+
+
+# run_every [MILISECONDS] [COMMAND]
+run_every() {
+    command=${@:2}
+    path=~/.BIN-DATA/pxh612-DAEMON-execute-"$command"
+
+    milisecondsWait=$(($1))
+    milisecondsNow=$(date +%s%3N)
+
+    if [ -e "$path" ]
+    then
+        milisecondsDone=$(cat "$path")
+    else
+        echo $milisecondsNow > "$path"
+    fi
+    if [ $((milisecondsNow-milisecondsDone)) -gt $milisecondsWait ]
+    then
+        echo "$command executed"
+        echo $milisecondsNow > "$path"
+        $command 1>/dev/null 2>&1 &
+    fi
+}
+
+
+#Fail: if command is only one agrument (exclude milisecondsWait), it couldnt be calculated true and execute
+    # Explain: old file has weird number, i simply created new file
+
+run_every 500 pxh612-info -s  
+run_every 500 pxh612-INFO-memory-notifyLowMemory
+run_every 500 pxh612-moveDownloads
+
+run_every 1000*15 pxh612-INFO-internetSpeed-getSpeed

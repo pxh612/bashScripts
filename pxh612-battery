@@ -1,0 +1,48 @@
+#!/bin/bash
+ACPI=$(acpi)
+battery=$(echo $ACPI | grep -P -o '[0-9]+(?=%)' )
+status=$(awk '/^Battery/ {printf $3}' <(acpi))
+time_remain=$(awk '/^Battery/ {printf $5}' <(echo "$ACPI"))
+echo -e " ACPI=$ACPI \n battery = $battery \n status = $status \n time_remain = $time_remain" >&2
+
+isDischarging(){
+	[ $status = "Discharging," ]
+}
+isLowBattery(){
+	[ battery -lt 5 ] && isDischarging
+}
+
+printInfo(){
+	if isDischarging
+	then
+		statusMessage=" (~ $time_remain) "
+	else
+		statusMessage=", charging"
+	fi
+
+	printf "Battery: ${battery}%%"
+	printf "$statusMessage\n" 
+}
+autoSuspend(){
+	if isLowBattery 
+	then
+		sleep 60
+		if isLowBattery 	
+		then
+			systemctl suspend
+		fi
+	fi
+}
+
+info=true
+while getopts 'i' FLAG; do
+  case "$FLAG" in
+	i) 
+		info=true ;;
+  esac
+done
+shift "$(($OPTIND -1))"
+
+[ $info = true ] && printInfo 
+# autoSuspend
+

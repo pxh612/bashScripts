@@ -1,0 +1,25 @@
+#!/bin/sh
+src=~/Downloads/Firefox
+dest=~/Downloads/Firefox
+
+mv \
+	$src/*.png \
+	$src/*.jpg \
+	$src/*.jpeg \
+	$dest-Image
+
+mv \
+	$src/*.zip \
+	$src/*.rar \
+	$src/*.tar* \
+	$dest-Archive
+
+mv \
+	$src/*.pdf \
+	$dest-PDF
+
+mv \
+	$src/*.deb \
+	$src/*.exe \
+	$src/*.snap \
+	$dest-Execute

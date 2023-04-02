@@ -1,0 +1,8 @@
+
+
+if [ -n $speed ]
+then 
+    printf "Speed: $speed Mbit/s = $speedMB MB/s"
+else 
+    printf "No connection..."
+fi
