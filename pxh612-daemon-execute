@@ -23,12 +23,13 @@ run_every() {
     fi
 }
 
-
-#Fail: if command is only one agrument (exclude milisecondsWait), it couldnt be calculated true and execute
-    # Explain: old file has weird number, i simply created new file
-
+# Unit = miliseconds
 run_every 500 pxh612-info -s  
 run_every 500 pxh612-INFO-memory-notifyLowMemory
 run_every 500 pxh612-moveDownloads
 
-run_every 1000*15 pxh612-INFO-internetSpeed-getSpeed
+SEC=1000
+run_every 15*$SEC pxh612-INFO-internetSpeed-getSpeed
+
+MIN=60*$SEC
+run_every 5*$MIN pxh612-gitPush
